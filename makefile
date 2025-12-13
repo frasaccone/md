@@ -3,9 +3,12 @@ include config.mk
 OBJS = md.o
 OUT  = md
 
-.PHONY: all
+.PHONY: all clean
 
 all: $(OUT)
+
+clean:
+	rm -f $(OBJS) $(OUT)
 
 $(OUT): $(OBJS)
 	$(CC) -o $@ $^ $(LDFLAGS)
