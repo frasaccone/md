@@ -1,4 +1,3 @@
 # md
 
-Markdown parser based on the [CommonMark](https://commonmark.org/)
-specification.
+Markdown parser.
