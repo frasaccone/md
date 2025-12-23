@@ -7,8 +7,13 @@
 #include <string.h>
 
 #include "arg.h"
+#include "structure.h"
 
 void usage(void);
+
+static struct block document = {
+	.type = CONTAINER_BLOCK_DOCUMENT,
+};
 
 void
 usage(void)
