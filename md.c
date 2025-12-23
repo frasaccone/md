@@ -13,19 +13,30 @@ void usage(void);
 void
 usage(void)
 {
-	fprintf(stderr, "Usage: %s [file]\n", argv0);
+	fprintf(stderr, "Usage: %s [-h | -t] [file]\n", argv0);
 	exit(EXIT_FAILURE);
 }
 
 int
 main(int argc, char **argv)
 {
+	int hflag = 0,
+	    tflag = 0;
 	FILE *file = stdin;
 
 	ARGBEGIN {
+	case 'h':
+		hflag = 1;
+		break;
+	case 't':
+		tflag = 1;
+		break;
 	default:
 		usage();
 	} ARGEND
+
+	if (hflag + tflag > 1)
+		usage();
 
 	if (argc > 1) {
 		usage();
