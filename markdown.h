@@ -13,7 +13,7 @@ enum blocktype {
 	LEAF_BLOCK_HEADER_2,
 	LEAF_BLOCK_PARAGRAPH,
 	LEAF_BLOCK_THEMATIC_BREAK,
-}
+};
 
 struct block {
 	enum blocktype type;
