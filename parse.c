@@ -33,6 +33,8 @@ addcontent(struct block *b, char *content)
 	/* Copy content to the new bytes of the reallocated content buffer. */
 	strncpy((char *)((size_t)b->content + origsize), content,
 	        strlen(content));
+
+	b->content[newsize] = '\0';
 }
 
 struct block *
