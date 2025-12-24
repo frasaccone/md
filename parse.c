@@ -22,6 +22,13 @@ lastopenchild(struct block *b)
 void
 parseline(struct block *document, char *line)
 {
-	(void)document;
+	struct block *c, *lastopen;
+
+	/* Make lastopen the deepest last open child of document, or make it
+	   document if it has no open children. */
+	lastopen = document;
+	while ((c = lastopenchild(lastopen)))
+		lastopen = c;
+
 	(void)line;
 }
