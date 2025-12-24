@@ -18,6 +18,10 @@ enum blocktype {
 struct block {
 	enum blocktype type;
 
+	/* It is 0 if the block is open, or any non-0 integer if it is
+	   closed. */
+	unsigned int closed;
+
 	/* The text content of the block. */
 	char *content;
 
