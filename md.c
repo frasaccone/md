@@ -51,7 +51,7 @@ main(int argc, char **argv)
 		}
 	}
 
-	document.type = CONTAINER_BLOCK_DOCUMENT;
+	document.type = BLOCK_CONTAINER_DOCUMENT;
 
 	while (fgets(line, sizeof(line), file))
 		parseline(&document, line);
