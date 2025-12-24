@@ -18,6 +18,7 @@ enum blocktype {
 struct block {
 	enum blocktype type;
 
+	/* The text content of the block. */
 	char *content;
 
 	/* The pointer to the next sibling. */
