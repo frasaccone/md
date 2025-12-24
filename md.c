@@ -49,7 +49,7 @@ main(int argc, char **argv)
 		file = fopen(argv[0], "rb");
 
 		if (!file) {
-			fprintf(stderr, "Unable to open %s.", argv[0]);
+			fprintf(stderr, "Unable to open %s.\n", argv[0]);
 			return EXIT_FAILURE;
 		}
 	}
