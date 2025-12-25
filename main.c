@@ -21,8 +21,8 @@ main(int argc, char **argv)
 	int hflag = 0,
 	    tflag = 0;
 	FILE *file = stdin;
-	size_t filesize;
-	char *filecontent;
+	char *in;
+	size_t insize;
 	struct mulnode *document;
 
 	ARGBEGIN {
@@ -51,15 +51,15 @@ main(int argc, char **argv)
 	}
 
 	fseek(file, 0, SEEK_END);
-	filesize = ftell(file);
+	insize = ftell(file);
 	fseek(file, 0, SEEK_SET);
 
-	if (!(filecontent = malloc(filesize + 1))) {
+	if (!(in = malloc(insize + 1))) {
 		perror("malloc");
 		exit(EXIT_FAILURE);
 	}
 
-	if (fread(filecontent, filesize, 1, file) < 1) {
+	if (fread(in, insize, 1, file) < 1) {
 		perror("fread");
 		exit(EXIT_FAILURE);
 	}
@@ -70,12 +70,12 @@ main(int argc, char **argv)
 	if (!(document = muldocument()))
 		return EXIT_FAILURE;
 
-	if (mulparse(document, filecontent, filesize)) {
+	if (mulparse(document, in, insize)) {
 		free(document);
 		return EXIT_FAILURE;
 	}
 
-	free(filecontent);
+	free(in);
 
 	if (tflag && multree(document))
 		return EXIT_FAILURE;
