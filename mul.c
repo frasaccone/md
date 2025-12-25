@@ -133,7 +133,7 @@ multree(struct mulnode *document)
 			break;
 		}
 
-		printf("]\n");
+		printf("] (%ld)\n", cur->contentsize);
 
 		for (child = cur->children; child; child = child->sibling) {
 			if (stacksize >= stackcap) {
