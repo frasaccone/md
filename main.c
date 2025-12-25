@@ -9,7 +9,7 @@
 
 void usage(void);
 
-static struct node document = { 0 };
+static struct mulnode document = { 0 };
 
 void
 usage(void)

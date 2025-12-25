@@ -1,7 +1,7 @@
 #ifndef _STRUCTURE_H
 #define _STRUCTURE_H
 
-enum nodetype {
+enum mulnodetype {
 	NODE_DOCUMENT,
 
 	NODE_ORDERED_LIST_ITEM,
@@ -15,8 +15,8 @@ enum nodetype {
 	NODE_THEMATIC_BREAK,
 };
 
-struct node {
-	enum nodetype type;
+struct mulnode {
+	enum mulnodetype type;
 
 	/* It is 0 if the node is open, or any non-0 integer if it is
 	   closed. */
@@ -26,10 +26,10 @@ struct node {
 	char *content;
 
 	/* The pointer to the next sibling. */
-	struct node *sibling;
+	struct mulnode *sibling;
 
 	/* The pointer to the first child. */
-	struct node *children;
+	struct mulnode *children;
 };
 
 #endif

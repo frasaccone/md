@@ -7,12 +7,12 @@
 
 /* It returns the last open child of node b. If b has no open children, NULL
    is returned instead. */
-static struct node *lastopenchild(struct node *n);
+static struct mulnode *lastopenchild(struct mulnode *n);
 
-struct node *
-lastopenchild(struct node *n)
+struct mulnode *
+lastopenchild(struct mulnode *n)
 {
-	struct node *c, *lastopen = NULL;
+	struct mulnode *c, *lastopen = NULL;
 
 	for (c = n->children; c && c->sibling; c = c->sibling) {
 		if (!c->closed)
@@ -23,9 +23,9 @@ lastopenchild(struct node *n)
 }
 
 void
-parsebuffer(struct node *document, char *buf, size_t buflen)
+parsebuffer(struct mulnode *document, char *buf, size_t buflen)
 {
-	struct node *c, *lastopen;
+	struct mulnode *c, *lastopen;
 
 	/* Make lastopen the deepest last open child of document, or make it
 	   document if it has no open children. */
