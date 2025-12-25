@@ -45,9 +45,7 @@ main(int argc, char **argv)
 		usage();
 		return EXIT_FAILURE;
 	} else if (argc == 1 && strcmp(argv[0], "-")) {
-		file = fopen(argv[0], "rb");
-
-		if (!file) {
+		if (!(file = fopen(argv[0], "rb"))) {
 			fprintf(stderr, "Unable to open %s.\n", argv[0]);
 			return EXIT_FAILURE;
 		}
