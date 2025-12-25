@@ -5,7 +5,6 @@
 
 #include "arg.h"
 #include "mul.h"
-#include "structure.h"
 
 void usage(void);
 
