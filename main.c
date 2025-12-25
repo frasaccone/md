@@ -12,7 +12,6 @@ void
 usage(void)
 {
 	fprintf(stderr, "Usage: %s [-h | -t] [file]\n", argv0);
-	exit(EXIT_FAILURE);
 }
 
 int
@@ -34,13 +33,17 @@ main(int argc, char **argv)
 		break;
 	default:
 		usage();
+		return EXIT_FAILURE;
 	} ARGEND
 
-	if (hflag + tflag > 1)
+	if (hflag + tflag > 1) {
 		usage();
+		return EXIT_FAILURE;
+	}
 
 	if (argc > 1) {
 		usage();
+		return EXIT_FAILURE;
 	} else if (argc == 1 && strcmp(argv[0], "-")) {
 		file = fopen(argv[0], "rb");
 
@@ -56,12 +59,12 @@ main(int argc, char **argv)
 
 	if (!(in = malloc(insize + 1))) {
 		perror("malloc");
-		exit(EXIT_FAILURE);
+		return EXIT_FAILURE;
 	}
 
 	if (fread(in, insize, 1, file) < 1) {
 		perror("fread");
-		exit(EXIT_FAILURE);
+		return EXIT_FAILURE;
 	}
 
 	if (file != stdin)
