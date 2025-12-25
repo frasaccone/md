@@ -65,6 +65,7 @@ main(int argc, char **argv)
 	}
 
 	if (fread(in, insize, 1, file) < 1) {
+		free(in);
 		if (file != stdin && fclose(file)) {
 			perror("fclose");
 			return EXIT_FAILURE;
@@ -74,14 +75,18 @@ main(int argc, char **argv)
 	}
 
 	if (file != stdin && fclose(file)) {
+		free(in);
 		perror("fclose");
 		return EXIT_FAILURE;
 	}
 
-	if (!(document = muldocument()))
+	if (!(document = muldocument())) {
+		free(in);
 		return EXIT_FAILURE;
+	}
 
 	if (mulparse(document, in, insize)) {
+		free(in);
 		free(document);
 		return EXIT_FAILURE;
 	}
