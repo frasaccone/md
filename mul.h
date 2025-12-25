@@ -45,4 +45,9 @@ struct mulnode *muldocument(void);
    In case of error, -1 is returned; otherwise, 0 is returned. */
 int mulparse(struct mulnode *document, char *buf, size_t buflen);
 
+/* It prints the document tree structure to stdout.
+
+   In case of error, -1 is returned; otherwise, 0 is returned. */
+int multree(struct mulnode *document);
+
 #endif

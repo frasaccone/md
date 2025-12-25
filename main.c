@@ -75,8 +75,12 @@ main(int argc, char **argv)
 		return EXIT_FAILURE;
 	}
 
-	free(document);
 	free(filecontent);
+
+	if (tflag && multree(document))
+		return EXIT_FAILURE;
+
+	free(document);
 
 	return EXIT_SUCCESS;
 }
