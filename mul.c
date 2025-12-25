@@ -37,6 +37,7 @@ muldocument(void)
 		return NULL;
 	}
 
+	memset(d, 0, sizeof(struct mulnode));
 	d->type = MUL_NODE_DOCUMENT;
 
 	return d;
