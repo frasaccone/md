@@ -1,6 +1,5 @@
 #include "buffer.h"
 
-#include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -17,7 +16,7 @@ addtobuffer(char *buf, size_t buflen, char *new, size_t newlen)
 	   realloc just works like a normal malloc. */
 	if (!(buf = realloc(buf, newsize))) {
 		perror("realloc");
-		exit(EXIT_FAILURE);
+		return NULL;
 	}
 
 	/* Copy new to the new bytes of the reallocated buf buffer. */

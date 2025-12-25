@@ -50,10 +50,11 @@ parsebuffer(struct mulnode *document, char *buf, size_t buflen)
 	while ((c = lastopenchild(lastopen)))
 		lastopen = c;
 
-	lastopen->content = addtobuffer(lastopen->content,
-	                                lastopen->content
-	                                ? strlen(lastopen->content)
-	                                : 0,
-	                                buf,
-	                                strnlen(buf, buflen));
+	if (!(lastopen->content = addtobuffer(lastopen->content,
+	                                      lastopen->content
+	                                      ? strlen(lastopen->content)
+	                                      : 0,
+	                                      buf,
+	                                      strnlen(buf, buflen))))
+		exit(EXIT_FAILURE);
 }
