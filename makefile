@@ -1,6 +1,6 @@
 include config.mk
 
-OBJS = md.o parse.o
+OBJS = buffer.o md.o parse.o
 OUT  = md
 
 .PHONY: all clean install uninstall
