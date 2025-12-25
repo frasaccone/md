@@ -93,8 +93,10 @@ main(int argc, char **argv)
 
 	free(in);
 
-	if (tflag && multree(document))
+	if (tflag && multree(document)) {
+		free(document);
 		return EXIT_FAILURE;
+	}
 
 	free(document);
 
