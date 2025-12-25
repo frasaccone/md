@@ -26,6 +26,7 @@ struct mulnode {
 
 	/* The text content of the node. */
 	char *content;
+	size_t contentsize;
 
 	/* The pointer to the next sibling. */
 	struct mulnode *sibling;
