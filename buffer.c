@@ -4,25 +4,26 @@
 #include <stdlib.h>
 #include <string.h>
 
-char *
-addtobuffer(char *buf, size_t buflen, char *new, size_t newlen)
+size_t
+addtobuffer(char **buf, size_t buflen, char *new, size_t newlen)
 {
 	size_t origsize, newsize;
 
-	origsize = buf ? strnlen(buf, buflen) : 0;
+	origsize = *buf ? strnlen(*buf, buflen) : 0;
 	newsize = origsize + strnlen(new, newlen) + 1;
 
 	/* Reallocate the buf buffer with the new extended size. If it is NULL,
 	   realloc just works like a normal malloc. */
-	if (!(buf = realloc(buf, newsize))) {
+	if (!(*buf = realloc(*buf, newsize))) {
 		perror("realloc");
-		return NULL;
+		return 0;
 	}
 
 	/* Copy new to the new bytes of the reallocated buf buffer. */
-	strncpy((char *)((size_t)buf + origsize), new, strnlen(new, newlen));
+	strncpy((char *)((size_t)(*buf) + origsize), new,
+	        strnlen(new, newlen));
 
-	buf[newsize] = '\0';
+	(*buf)[newsize] = '\0';
 
-	return buf;
+	return newsize;
 }

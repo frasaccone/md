@@ -55,12 +55,12 @@ mulparse(struct mulnode *document, char *buf, size_t buflen)
 	while ((c = lastopenchild(lastopen)))
 		lastopen = c;
 
-	if (!(lastopen->content = addtobuffer(lastopen->content,
-	                                      lastopen->content
-	                                      ? strlen(lastopen->content)
-	                                      : 0,
-	                                      buf,
-	                                      strnlen(buf, buflen))))
+	if (!addtobuffer(&lastopen->content,
+	                 lastopen->content
+	                 ? strlen(lastopen->content)
+	                 : 0,
+	                 buf,
+	                 strnlen(buf, buflen)))
 		return -1;
 
 	return 0;
