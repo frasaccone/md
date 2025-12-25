@@ -7,8 +7,8 @@
    of length newlen at its end. Lengths are to be calculated without the NULL
    character.
 
-   In case of error, perror is called and NULL is returned; otherwise, the
-   reallocated buffer is returned. */
+   In case of error, NULL is returned; otherwise, the reallocated buffer is
+   returned. */
 char *addtobuffer(char *buf, size_t buflen, char *new, size_t newlen);
 
 #endif

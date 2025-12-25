@@ -34,8 +34,8 @@ struct mulnode {
 	struct mulnode *children;
 };
 
-/* It allocates and returns a document node. In case of error, perror is called
-   and NULL is returned instead. */
+/* It allocates and returns a document node. In case of error, NULL is returned
+   instead. */
 struct mulnode *muldocument(void);
 
 /* It updates the document node after parsing the given buf buffer of length
