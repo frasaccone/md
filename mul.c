@@ -159,8 +159,9 @@ mulparse(struct mulnode *document, char *buf, size_t buflen)
 
 		/* In case of a double newline, close the last node and set
 		   its parent as the last open node. This does not happen
-		   when the last open node is the document. */
-		if (last != document && off < buflen - 1
+		   when the last node is open or is the document. */
+		if (last != document && !last->closed
+		                     && off < buflen - 1
 		                     && buf[off] == '\n'
 		                     && buf[off + 1] == '\n') {
 			last->closed = 1;
