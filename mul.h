@@ -29,6 +29,9 @@ struct mulnode {
 	char *content;
 	size_t contentsize;
 
+	/* The pointer to the parent. */
+	struct mulnode *parent;
+
 	/* The pointer to the next sibling. */
 	struct mulnode *sibling;
 
