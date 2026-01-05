@@ -5,10 +5,79 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define LEN(a) (unsigned int)(sizeof(a)/sizeof(*a))
+
 struct mulnodestackel {
 	struct mulnode *n;
 	int l;
 };
+
+/* A parser function takes a pointer res to the resulting struct mulnode to
+   allocate, a pointer buf to the buffer to parse and its size, buflen.
+
+   -1 is returned in case of error. 0 is returned and res is not set if no new
+   node is found. The number of characters which contain the mulnode res is set
+   to is returned in case a new node is found. */
+typedef long (*parser)(struct mulnode **res, char *buf, size_t buflen);
+
+static long parseheader(struct mulnode **res, char *buf, size_t buflen);
+
+static parser parsers[1] = {
+	parseheader,
+};
+
+long
+parseheader(struct mulnode **res, char *buf, size_t buflen)
+{
+	size_t l, ul1, ul2, ul3;
+	char *ustart;
+
+	/* Set l to the length of the possibly underlined content. It must be
+	   in a single line. */
+	for (l = 0; buf[l] != '\n' && l < buflen; l++);
+
+	if (!l)
+		return 0;
+
+	/* Set ustart to the start character of the possible underline. It
+	   skips the newline character present between the content and the
+	   underline. */
+	ustart = &buf[l + 1];
+
+	/* Set ul1 to the length of the possible "=" underline. */
+	for (ul1 = 0; l + ul1 < buflen && ustart[ul1] == '='; ul1++);
+
+	/* Set ul2 to the length of the possible "-" underline. */
+	for (ul2 = 0; l + ul2 < buflen && ustart[ul2] == '-'; ul2++);
+
+	/* Set ul3 to the length of the possible "~" underline. */
+	for (ul3 = 0; l + ul3 < buflen && ustart[ul3] == '~'; ul3++);
+
+	if (l != ul1 && l != ul2 && l != ul3)
+		return 0;
+
+	if (!(*res = malloc(sizeof(struct mulnode)))) {
+		perror("malloc");
+		return -1;
+	}
+	memset(*res, 0, sizeof(struct mulnode));
+
+	(*res)->closed = 1;
+	(*res)->content = buf;
+	(*res)->contentsize = l;
+
+	if (l == ul1)
+		(*res)->type = MUL_NODE_HEADER_1;
+	else if (l == ul2)
+		(*res)->type = MUL_NODE_HEADER_2;
+	else if (l == ul3)
+		(*res)->type = MUL_NODE_HEADER_3;
+	else
+		return 0; /* Unreachable. */
+
+	/* 1 is added to l to take the newline characters into account. */
+	return 2 * (l + 1);
+}
 
 struct mulnode *
 muldocument(void)
@@ -29,17 +98,69 @@ muldocument(void)
 int
 mulparse(struct mulnode *document, char *buf, size_t buflen)
 {
-	if (!(document->content = realloc(document->content,
-	                                  document->contentsize + buflen))) {
-		perror("realloc");
-		return -1;
+	size_t off;
+	struct mulnode *last = document;
+
+	off = 0;
+	while (off < buflen) {
+		unsigned int i;
+		long l;
+		struct mulnode *new;
+
+		/* Set l to the number of affected characters by any of the
+		   parsers. It follows the order of the parsers array. */
+		for (i = 0; i < LEN(parsers); i++) {
+			if ((l = parsers[i](&new,
+			                    &buf[off],
+			                    buflen - off)) == -1)
+				return -1;
+			if (l)
+				break;
+		}
+
+		/* Add the number of affected characters to the offset. */
+		off += l;
+
+		if (!l) {
+			/* If no new node has been created, just copy the
+			   character to the content of the last open node. */
+			last->content = realloc(last->content,
+			                        last->contentsize + 1);
+			if (!last->content) {
+				perror("realloc");
+				return -1;
+			}
+			last->contentsize++;
+			off++;
+		} else {
+			/* Make the new node a child of the last open node. */
+			if (!last->children) {
+				last->children = new;
+				/* TODO: Set new->parent to last. */
+			} else {
+				struct mulnode *tail;
+				for (tail = last->children;
+				     tail->sibling;
+				     tail = tail->sibling);
+
+				tail->sibling = new;
+				/* TODO: Set new->parent to last. */
+			}
+
+			/* If still open, make new the last open node. */
+			if (!new->closed)
+				last = new;
+		}
+
+		/* In case of a double newline, close the last node and set
+		   its parent as the last open node. This does not happen
+		   when the last open node is the document. */
+		if (off < buflen && buf[off] == '\n' && buf[off + 1] == '\n'
+		                                     && last != document) {
+			last->closed = 1;
+			/* TODO: Set last to its parent. */
+		}
 	}
-
-	memcpy((char *)((size_t)document->content + document->contentsize),
-	       buf, buflen);
-
-	document->contentsize += buflen;
-	document->content[document->contentsize] = '\0';
 
 	return 0;
 }
