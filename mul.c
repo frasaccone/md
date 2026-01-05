@@ -139,7 +139,6 @@ mulparse(struct mulnode *document, char *buf, size_t buflen)
 			/* Make the new node a child of the last open node. */
 			if (!last->children) {
 				last->children = new;
-				new->parent = last;
 			} else {
 				struct mulnode *tail;
 				for (tail = last->children;
@@ -147,8 +146,9 @@ mulparse(struct mulnode *document, char *buf, size_t buflen)
 				     tail = tail->sibling);
 
 				tail->sibling = new;
-				new->parent = last;
 			}
+
+			new->parent = last;
 
 			/* If still open, make new the last open node. */
 			if (!new->closed)
