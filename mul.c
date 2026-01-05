@@ -10,23 +10,6 @@ struct mulnodestackel {
 	int l;
 };
 
-/* It returns the last open child of node b. If b has no open children, NULL
-   is returned instead. */
-static struct mulnode *lastopenchild(struct mulnode *n);
-
-struct mulnode *
-lastopenchild(struct mulnode *n)
-{
-	struct mulnode *c, *lastopen = NULL;
-
-	for (c = n->children; c && c->sibling; c = c->sibling) {
-		if (!c->closed)
-			lastopen = c;
-	}
-
-	return lastopen;
-}
-
 struct mulnode *
 muldocument(void)
 {
@@ -46,25 +29,17 @@ muldocument(void)
 int
 mulparse(struct mulnode *document, char *buf, size_t buflen)
 {
-	struct mulnode *c, *lastopen;
-
-	/* Make lastopen the deepest last open child of document, or make it
-	   document if it has no open children. */
-	lastopen = document;
-	while ((c = lastopenchild(lastopen)))
-		lastopen = c;
-
-	if (!(lastopen->content = realloc(lastopen->content,
-	                                  lastopen->contentsize + buflen))) {
+	if (!(document->content = realloc(document->content,
+	                                  document->contentsize + buflen))) {
 		perror("realloc");
 		return -1;
 	}
 
-	memcpy((char *)((size_t)lastopen->content + lastopen->contentsize),
+	memcpy((char *)((size_t)document->content + document->contentsize),
 	       buf, buflen);
 
-	lastopen->contentsize += buflen;
-	lastopen->content[lastopen->contentsize] = '\0';
+	document->contentsize += buflen;
+	document->content[document->contentsize] = '\0';
 
 	return 0;
 }
