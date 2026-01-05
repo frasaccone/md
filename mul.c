@@ -67,11 +67,11 @@ parseheader(struct mulnode **res, char *buf, size_t buflen)
 	(*res)->contentsize = l;
 	(*res)->content[(*res)->contentsize] = '\0';
 
-	if (l == ul1)
+	if (l < ul1)
 		(*res)->type = MUL_NODE_HEADER_1;
-	else if (l == ul2)
+	else if (l < ul2)
 		(*res)->type = MUL_NODE_HEADER_2;
-	else if (l == ul3)
+	else if (l < ul3)
 		(*res)->type = MUL_NODE_HEADER_3;
 	else
 		return 0; /* Unreachable. */
