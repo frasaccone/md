@@ -125,16 +125,18 @@ mulparse(struct mulnode *document, char *buf, size_t buflen)
 		if (!l) {
 			/* If no new node has been created, just copy the
 			   character to the content of the last open node. */
-			last->content = realloc(last->content,
-			                        last->contentsize + 1);
-			if (!last->content) {
-				perror("realloc");
-				return -1;
+			if (off < buflen) {
+				last->content = realloc(last->content,
+				                        last->contentsize + 1);
+				if (!last->content) {
+					perror("realloc");
+					return -1;
+				}
+				last->content[last->contentsize] = buf[off];
+				last->contentsize++;
+				last->content[last->contentsize] = '\0';
+				off++;
 			}
-			last->content[last->contentsize] = buf[off];
-			last->contentsize++;
-			last->content[last->contentsize] = '\0';
-			off++;
 		} else {
 			/* Make the new node a child of the last open node. */
 			if (!last->children) {
