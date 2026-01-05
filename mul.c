@@ -130,6 +130,7 @@ mulparse(struct mulnode *document, char *buf, size_t buflen)
 				perror("realloc");
 				return -1;
 			}
+			last->content[last->contentsize] = buf[off];
 			last->contentsize++;
 			off++;
 		} else {
