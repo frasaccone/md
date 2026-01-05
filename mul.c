@@ -239,10 +239,12 @@ multree(struct mulnode *document)
 
 		printf("] (%ld)\n", cur->contentsize);
 
-		for (i = 0; i < l; i++)
-			printf("\t");
+		if (cur->content) {
+			for (i = 0; i < l; i++)
+				printf("\t");
 
-		printf("%s\n", cur->content);
+			printf("%s\n", cur->content);
+		}
 
 		for (child = cur->children; child; child = child->sibling) {
 			if (stacksize >= stackcap) {
