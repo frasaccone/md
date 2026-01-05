@@ -50,8 +50,8 @@ parseheader(struct mulnode **res, char *buf, size_t buflen)
 	/* Set ul2 to the length of the possible "-" underline. */
 	for (ul2 = 0; l + ul2 < buflen && ustart[ul2] == '-'; ul2++);
 
-	/* Set ul3 to the length of the possible "~" underline. */
-	for (ul3 = 0; l + ul3 < buflen && ustart[ul3] == '~'; ul3++);
+	/* Set ul3 to the length of the possible "." underline. */
+	for (ul3 = 0; l + ul3 < buflen && ustart[ul3] == '.'; ul3++);
 
 	if (l != ul1 && l != ul2 && l != ul3)
 		return 0;
