@@ -65,6 +65,7 @@ parseheader(struct mulnode **res, char *buf, size_t buflen)
 	(*res)->closed = 1;
 	(*res)->content = buf;
 	(*res)->contentsize = l;
+	(*res)->content[(*res)->contentsize] = '\0';
 
 	if (l == ul1)
 		(*res)->type = MUL_NODE_HEADER_1;
@@ -132,6 +133,7 @@ mulparse(struct mulnode *document, char *buf, size_t buflen)
 			}
 			last->content[last->contentsize] = buf[off];
 			last->contentsize++;
+			last->content[last->contentsize] = '\0';
 			off++;
 		} else {
 			/* Make the new node a child of the last open node. */
